@@ -13,28 +13,10 @@ import {
 interface FooterProps {
   onOpenBooking: () => void;
   reservationPhone: string;
-  onOpenAdmin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenBooking, reservationPhone, onOpenAdmin }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenBooking, reservationPhone }) => {
   const [legalModal, setLegalModal] = useState<'cgv' | 'privacy' | null>(null);
-  const [clickCount, setClickCount] = useState<number>(0);
-
-  const handleSecretCopyrightClick = () => {
-    setClickCount(prev => {
-      const next = prev + 1;
-      if (next >= 3) {
-        if (onOpenAdmin) onOpenAdmin();
-        return 0;
-      }
-      return next;
-    });
-
-    // Reset counter after 2.5 seconds
-    setTimeout(() => {
-      setClickCount(0);
-    }, 2500);
-  };
 
   return (
     <footer className="bg-[#050609] border-t border-white/10 text-slate-400 text-xs pt-16 pb-12">
@@ -171,11 +153,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking, reservationPhone,
 
         {/* Copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <p 
-            onClick={handleSecretCopyrightClick}
-            className="text-slate-500 text-xs cursor-default select-none transition-colors hover:text-slate-400"
-            title="Amaya & AJCD Cogne Diola"
-          >
+          <p className="text-slate-500 text-xs select-none">
             © 2026 Expert Even & AJCD Cogne Diola — Tous droits réservés.
           </p>
           <div className="flex items-center gap-4 text-slate-500 text-xs">

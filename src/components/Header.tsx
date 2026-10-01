@@ -4,7 +4,6 @@ import {
   Menu, 
   X, 
   QrCode, 
-  Shield, 
   Sun, 
   Moon, 
   Phone,
@@ -14,8 +13,6 @@ import {
 interface HeaderProps {
   onOpenBooking: () => void;
   onOpenScanner: () => void;
-  onOpenAdmin?: () => void;
-  showAdminButton?: boolean;
   darkMode: boolean;
   onToggleTheme: () => void;
 }
@@ -23,8 +20,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   onOpenBooking,
   onOpenScanner,
-  onOpenAdmin,
-  showAdminButton = false,
   darkMode,
   onToggleTheme
 }) => {
@@ -90,17 +85,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Scanner</span>
             </button>
 
-            {/* Admin button (hidden from public visitors, visible only when organizer unlocks it) */}
-            {showAdminButton && onOpenAdmin && (
-              <button
-                onClick={onOpenAdmin}
-                title="Espace Organisateur (Déverrouillé)"
-                className="p-2 text-amber-400 hover:text-white bg-amber-500/10 hover:bg-amber-500/20 rounded-lg border border-amber-500/30 transition-colors animate-fadeIn"
-              >
-                <Shield className="w-4 h-4" />
-              </button>
-            )}
-
             {/* Primary CTA */}
             <button
               onClick={onOpenBooking}
@@ -158,23 +142,11 @@ export const Header: React.FC<HeaderProps> = ({
                   setMobileMenuOpen(false);
                   onOpenScanner();
                 }}
-                className="flex-1 py-2.5 px-3 rounded-lg text-xs font-medium text-center bg-white/5 border border-white/10 text-slate-300 flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 px-3 rounded-lg text-xs font-medium text-center bg-white/5 border border-white/10 text-slate-300 flex items-center justify-center gap-1.5"
               >
                 <QrCode className="w-4 h-4 text-purple-400" />
-                Contrôle Entrée
+                Contrôle Entrée (Scanner)
               </button>
-              {showAdminButton && onOpenAdmin && (
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenAdmin();
-                  }}
-                  className="py-2.5 px-3 rounded-lg text-xs font-medium text-center bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center gap-1.5 animate-fadeIn"
-                >
-                  <Shield className="w-4 h-4" />
-                  Admin
-                </button>
-              )}
             </div>
           </div>
         </div>

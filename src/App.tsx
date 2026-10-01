@@ -159,27 +159,17 @@ export default function App() {
   const [selectedTicketType, setSelectedTicketType] = useState<TicketType | null>(null);
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
-  const [isAdminUnlocked, setIsAdminUnlocked] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('jn_admin_unlocked') === 'true';
-    } catch {
-      return false;
-    }
-  });
 
-  const unlockAndOpenAdmin = () => {
-    setIsAdminUnlocked(true);
+  const openAdmin = () => {
     setIsAdminOpen(true);
-    try {
-      localStorage.setItem('jn_admin_unlocked', 'true');
-    } catch {}
   };
 
-  const lockAdminAccess = () => {
-    setIsAdminUnlocked(false);
+  const closeAdmin = () => {
     setIsAdminOpen(false);
     try {
-      localStorage.removeItem('jn_admin_unlocked');
+      if (window.location.hash.toLowerCase().includes('admin') || window.location.hash.toLowerCase().includes('organisateur')) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
     } catch {}
   };
 
@@ -328,7 +318,7 @@ export default function App() {
         params.has('admin') || 
         params.has('manage')
       ) {
-        unlockAndOpenAdmin();
+        openAdmin();
       }
     };
 
@@ -339,7 +329,7 @@ export default function App() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.altKey && e.key.toLowerCase() === 'a') || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a')) {
         e.preventDefault();
-        unlockAndOpenAdmin();
+        openAdmin();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -417,8 +407,6 @@ export default function App() {
       <Header
         onOpenBooking={() => handleOpenBooking()}
         onOpenScanner={() => setIsScannerOpen(true)}
-        onOpenAdmin={unlockAndOpenAdmin}
-        showAdminButton={isAdminUnlocked}
         darkMode={darkMode}
         onToggleTheme={() => setDarkMode(!darkMode)}
       />
@@ -485,7 +473,6 @@ export default function App() {
       <Footer
         onOpenBooking={() => handleOpenBooking()}
         reservationPhone={eventData.reservation_phone}
-        onOpenAdmin={unlockAndOpenAdmin}
       />
 
       {/* Floating Mobile Sticky CTA */}
@@ -537,12 +524,12 @@ export default function App() {
           <AdminModal
             isOpen={isAdminOpen}
             onClose={() => {
-              setIsAdminOpen(false);
+              closeAdmin();
               fetchData();
             }}
             onOpenScanner={() => setIsScannerOpen(true)}
             onDataUpdated={fetchData}
-            onLockAccess={lockAdminAccess}
+            onLockAccess={closeAdmin}
           />
         )}
       </Suspense>
